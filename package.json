@@ -1,5 +1,5 @@
 {
-	"name": "paginationembed",
+	"name": "@ryukobot/paginationembed",
 	"version": "1.0.0",
 	"description": "Easy array pagination in Discord.js v13",
 	"main": "dist/index.js",
