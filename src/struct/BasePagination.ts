@@ -1,6 +1,6 @@
-import { MessageEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 
-type CallbackFn = (value: never, index: number) => unknown;
+type CallbackFn = (value: never, index: number, array: never[]) => unknown;
 
 export interface BasePaginationOptions {
 	embed: MessageEmbed;
@@ -24,14 +24,29 @@ export default abstract class BasePagination {
 
 	constructor(options: BasePaginationOptions) {
 		const {
-			embed,
+			embed = new MessageEmbed(),
 			array,
 			startPage = 1,
 			itemsPerPage,
 			callbackfn,
-			timeout = 300,
+			timeout = 300000,
 			title = "Values",
 		} = options;
+
+		if (typeof array !== "object")
+			throw new TypeError("Array is not an Object");
+
+		if (typeof startPage !== "number")
+			throw new TypeError("startPage is not a number");
+
+		if (typeof itemsPerPage !== "number")
+			throw new TypeError("itemsPerPage is not a number");
+
+		if (typeof timeout !== "number")
+			throw new TypeError("timeout is not a number");
+
+		if (typeof title !== "string")
+			throw new TypeError("title is not a sting");
 
 		this.embed = embed;
 		this.format = callbackfn;
@@ -40,6 +55,14 @@ export default abstract class BasePagination {
 		this.itemsPerPage = itemsPerPage;
 		this.timeout = timeout;
 		this.title = title;
+	}
+
+	protected paginate(
+		array: never[],
+		pageSize: number,
+		page: number
+	): never[] {
+		return array.slice((page - 1) * pageSize, page * pageSize);
 	}
 
 	public abstract build(): void;
