@@ -35,6 +35,16 @@ export default class MessagePagination extends BasePagination {
 
 		const startPage = this.paginate(values, this.itemsPerPage, page);
 
+		const selectValues: MessageSelectOptionData[] = [];
+
+		for (let i = 1; i <= pages; i++) {
+			selectValues.push({
+				label: `Page #${i}`,
+				description: `Jump to Page #${i}`,
+				value: i.toString(),
+			});
+		}
+
 		const embed = this.embed;
 
 		embed.setFields([
@@ -65,8 +75,7 @@ export default class MessagePagination extends BasePagination {
 							customId: "forward",
 							style: "PRIMARY",
 							disabled:
-								// prettier-ignore
-								!((page + 1) * this.itemsPerPage >= array.length),
+								(page + 1) * this.itemsPerPage >= array.length,
 						},
 					],
 				}),
@@ -78,15 +87,7 @@ export default class MessagePagination extends BasePagination {
 							placeholder: `Page #${page}`,
 							maxValues: 1,
 							// Fucking mess lmao
-							options: [
-								...(array.map((value, i) => {
-									return {
-										label: `Page #${i + 1}`,
-										description: `Jump to Page #${i + 1}`,
-										value: (i + 1).toString(),
-									};
-								}) as unknown as MessageSelectOptionData[]),
-							],
+							options: selectValues,
 						},
 					],
 				}),
@@ -95,7 +96,9 @@ export default class MessagePagination extends BasePagination {
 
 		const filter = (i: ButtonInteraction | SelectMenuInteraction) =>
 			(i.componentType == "BUTTON" || i.componentType == "SELECT_MENU") &&
-			(i.customId === "back" || i.customId === "forward") &&
+			(i.customId === "back" ||
+				i.customId === "forward" ||
+				i.customId === "select") &&
 			i.user.id === message.author.id;
 
 		const collector = message.channel.createMessageComponentCollector({
@@ -106,6 +109,68 @@ export default class MessagePagination extends BasePagination {
 		collector.on(
 			"collect",
 			(i: ButtonInteraction | SelectMenuInteraction) => {
+				if (i.componentType == "SELECT_MENU") {
+					i.deferUpdate();
+
+					page = parseInt(i.values[0]);
+
+					const newPaginate = this.paginate(
+						values,
+						this.itemsPerPage,
+						page
+					);
+
+					embed.setFields([
+						{
+							name: this.title,
+							value: newPaginate.join("\n"),
+						},
+					]);
+
+					sent.edit({
+						content: `Page ${page}/${pages}`,
+						embeds: [embed],
+						components: [
+							new MessageActionRow({
+								components: [
+									{
+										type: "BUTTON",
+										label: "Back",
+										customId: "back",
+										style: "PRIMARY",
+										disabled: page == 1 ? true : false,
+									},
+									{
+										type: "BUTTON",
+										label: "Forward",
+										customId: "forward",
+										style: "PRIMARY",
+										disabled: selectValues.find(
+											(value) =>
+												value.value ==
+												(page + 1).toString()
+										)
+											? false
+											: true,
+									},
+								],
+							}),
+							new MessageActionRow({
+								components: [
+									{
+										type: "SELECT_MENU",
+										customId: "select",
+										placeholder: `Page #${page}`,
+										maxValues: 1,
+										// Fucking mess lmao
+										options: selectValues,
+									},
+								],
+							}),
+						],
+					});
+				}
+
 				if (i.componentType == "BUTTON") {
 					if (i.customId == "forward") {
 						i.deferUpdate();
@@ -138,18 +203,20 @@ export default class MessagePagination extends BasePagination {
 												customId: "back",
 												style: "PRIMARY",
 												disabled:
-													// prettier-ignore
-													!((page + 1) * this.itemsPerPage >= array.length),
+													page == 1 ? true : false,
 											},
 											{
 												type: "BUTTON",
 												label: "Forward",
 												customId: "forward",
 												style: "PRIMARY",
-												disabled:
-													(page + 1) *
-														this.itemsPerPage >=
-													array.length,
+												disabled: selectValues.find(
+													(value) =>
+														value.value ==
+														(page + 1).toString()
+												)
+													? false
+													: true,
 											},
 										],
 									}),
@@ -161,23 +228,7 @@ export default class MessagePagination extends BasePagination {
 												placeholder: `Page #${page}`,
 												maxValues: 1,
 												// Fucking mess lmao
-												options: [
-													...(array.map(
-														(value, i) => {
-															return {
-																label: `Page #${
-																	i + 1
-																}`,
-																description: `Jump to Page #${
-																	i + 1
-																}`,
-																value: (
-																	i + 1
-																).toString(),
-															};
-														}
-													) as unknown as MessageSelectOptionData[]),
-												],
+												options: selectValues,
 											},
 										],
 									}),
@@ -216,20 +267,21 @@ export default class MessagePagination extends BasePagination {
 												label: "Back",
 												customId: "back",
 												style: "PRIMARY",
-												disabled: !(
-													(page - 1) *
-														this.itemsPerPage >=
-													array.length
-												),
+												disabled:
+													page == 1 ? true : false,
 											},
 											{
 												type: "BUTTON",
 												label: "Forward",
 												customId: "forward",
 												style: "PRIMARY",
-												disabled:
-													// prettier-ignore
-													!((page + 1) * this.itemsPerPage >= array.length),
+												disabled: selectValues.find(
+													(value) =>
+														value.value ==
+														(page + 1).toString()
+												)
+													? false
+													: true,
 											},
 										],
 									}),
@@ -241,23 +293,7 @@ export default class MessagePagination extends BasePagination {
 												placeholder: `Page #${page}`,
 												maxValues: 1,
 												// Fucking mess lmao
-												options: [
-													...(array.map(
-														(value, i) => {
-															return {
-																label: `Page #${
-																	i + 1
-																}`,
-																description: `Jump to Page #${
-																	i + 1
-																}`,
-																value: (
-																	i + 1
-																).toString(),
-															};
-														}
-													) as unknown as MessageSelectOptionData[]),
-												],
+												options: selectValues,
 											},
 										],
 									}),
