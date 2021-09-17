@@ -1,6 +1,6 @@
 {
 	"name": "@ryukobot/paginationembed",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Easy array pagination in Discord.js v13",
 	"main": "dist/index.js",
 	"scripts": {
@@ -18,9 +18,9 @@
 	"homepage": "https://github.com/ryukobot/paginationembed",
 	"devDependencies": {
 		"@types/node": "^16.9.2",
+		"discord.js": "^13.1.0",
 		"prettier": "^2.4.0",
-		"typescript": "^4.4.3",
-		"discord.js": "^13.1.0"
+		"typescript": "^4.4.3"
 	},
 	"peerDependencies": {
 		"discord.js": "^13.1.0"
