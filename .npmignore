@@ -1,0 +1,12 @@
+# NPM
+node_modules
+.git
+.vscode
+.eslintrc.json
+.gitattributes
+.gitignore
+.travis.yml
+test/
+docs/
+tsconfig.json
+tslint.json
