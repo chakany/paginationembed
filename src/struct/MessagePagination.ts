@@ -190,10 +190,13 @@ export default class MessagePagination extends BasePagination {
 
 				if (i.componentType == "BUTTON") {
 					if (i.customId == "forward") {
-						i.deferUpdate();
-
 						// Check if there are items in next page
-						if ((page + 1) * this.itemsPerPage >= array.length) {
+						if (
+							selectValues.find(
+								(value) => value.value == (page + 1).toString()
+							)
+						) {
+							i.deferUpdate();
 							page++;
 							const newPaginate = this.paginate(
 								values,
@@ -263,10 +266,14 @@ export default class MessagePagination extends BasePagination {
 					}
 
 					if (i.customId == "back") {
-						i.deferUpdate();
-
 						// Check if there are items in previous page
-						if ((page - 1) * this.itemsPerPage <= array.length) {
+						if (
+							selectValues.find(
+								(value) => value.value == (page - 1).toString()
+							)
+						) {
+							i.deferUpdate();
+
 							page--;
 							const newPaginate = this.paginate(
 								values,
