@@ -57,28 +57,9 @@ export default class MessagePagination extends BasePagination {
 		const message = this.message;
 
 		const sent = await message.channel.send({
-			content: `Page ${page}/${pages}`,
 			embeds: [embed],
 			components: [
-				new MessageActionRow({
-					components: [
-						{
-							type: "BUTTON",
-							label: "Back",
-							customId: "back",
-							style: "PRIMARY",
-							disabled: page == 1 ? true : false,
-						},
-						{
-							type: "BUTTON",
-							label: "Forward",
-							customId: "forward",
-							style: "PRIMARY",
-							disabled:
-								(page + 1) * this.itemsPerPage >= array.length,
-						},
-					],
-				}),
+				/** 
 				new MessageActionRow({
 					components: [
 						{
@@ -91,14 +72,42 @@ export default class MessagePagination extends BasePagination {
 						},
 					],
 				}),
+				*/
+				new MessageActionRow({
+					components: [
+						{
+							type: "BUTTON",
+							label: "◀️",
+							customId: "back",
+							style: "SECONDARY",
+							disabled: page == 1 ? true : false,
+						},
+						{
+							type: "BUTTON",
+							label: `${page}/${pages}`,
+							customId: "counter",
+							style: "PRIMARY",
+							disabled: true,
+						},
+						{
+							type: "BUTTON",
+							label: "▶️",
+							customId: "forward",
+							style: "SECONDARY",
+							disabled: selectValues.find(
+								(value) => value.value == (page + 1).toString()
+							)
+								? false
+								: true,
+						},
+					],
+				}),
 			],
 		});
 
 		const filter = (i: ButtonInteraction | SelectMenuInteraction) =>
-			(i.componentType == "BUTTON" || i.componentType == "SELECT_MENU") &&
-			(i.customId === "back" ||
-				i.customId === "forward" ||
-				i.customId === "select") &&
+			i.componentType == "BUTTON" &&
+			(i.customId === "back" || i.customId === "forward") &&
 			i.user.id === message.author.id;
 
 		const collector = message.channel.createMessageComponentCollector({
@@ -128,33 +137,9 @@ export default class MessagePagination extends BasePagination {
 					]);
 
 					sent.edit({
-						content: `Page ${page}/${pages}`,
 						embeds: [embed],
 						components: [
-							new MessageActionRow({
-								components: [
-									{
-										type: "BUTTON",
-										label: "Back",
-										customId: "back",
-										style: "PRIMARY",
-										disabled: page == 1 ? true : false,
-									},
-									{
-										type: "BUTTON",
-										label: "Forward",
-										customId: "forward",
-										style: "PRIMARY",
-										disabled: selectValues.find(
-											(value) =>
-												value.value ==
-												(page + 1).toString()
-										)
-											? false
-											: true,
-									},
-								],
-							}),
+							/**
 							new MessageActionRow({
 								components: [
 									{
@@ -164,6 +149,38 @@ export default class MessagePagination extends BasePagination {
 										maxValues: 1,
 										// Fucking mess lmao
 										options: selectValues,
+									},
+								],
+							}),
+							*/
+							new MessageActionRow({
+								components: [
+									{
+										type: "BUTTON",
+										label: "◀️",
+										customId: "back",
+										style: "SECONDARY",
+										disabled: page == 1 ? true : false,
+									},
+									{
+										type: "BUTTON",
+										label: `${page}/${pages}`,
+										customId: "counter",
+										style: "PRIMARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										label: "▶️",
+										customId: "forward",
+										style: "SECONDARY",
+										disabled: selectValues.find(
+											(value) =>
+												value.value ==
+												(page + 1).toString()
+										)
+											? false
+											: true,
 									},
 								],
 							}),
@@ -192,34 +209,9 @@ export default class MessagePagination extends BasePagination {
 							]);
 
 							sent.edit({
-								content: `Page ${page}/${pages}`,
 								embeds: [embed],
 								components: [
-									new MessageActionRow({
-										components: [
-											{
-												type: "BUTTON",
-												label: "Back",
-												customId: "back",
-												style: "PRIMARY",
-												disabled:
-													page == 1 ? true : false,
-											},
-											{
-												type: "BUTTON",
-												label: "Forward",
-												customId: "forward",
-												style: "PRIMARY",
-												disabled: selectValues.find(
-													(value) =>
-														value.value ==
-														(page + 1).toString()
-												)
-													? false
-													: true,
-											},
-										],
-									}),
+									/** 
 									new MessageActionRow({
 										components: [
 											{
@@ -229,6 +221,39 @@ export default class MessagePagination extends BasePagination {
 												maxValues: 1,
 												// Fucking mess lmao
 												options: selectValues,
+											},
+										],
+									}),
+									*/
+									new MessageActionRow({
+										components: [
+											{
+												type: "BUTTON",
+												label: "◀️",
+												customId: "back",
+												style: "SECONDARY",
+												disabled:
+													page == 1 ? true : false,
+											},
+											{
+												type: "BUTTON",
+												label: `${page}/${pages}`,
+												customId: "counter",
+												style: "PRIMARY",
+												disabled: true,
+											},
+											{
+												type: "BUTTON",
+												label: "▶️",
+												customId: "forward",
+												style: "SECONDARY",
+												disabled: selectValues.find(
+													(value) =>
+														value.value ==
+														(page + 1).toString()
+												)
+													? false
+													: true,
 											},
 										],
 									}),
@@ -257,34 +282,9 @@ export default class MessagePagination extends BasePagination {
 							]);
 
 							sent.edit({
-								content: `Page ${page}/${pages}`,
 								embeds: [embed],
 								components: [
-									new MessageActionRow({
-										components: [
-											{
-												type: "BUTTON",
-												label: "Back",
-												customId: "back",
-												style: "PRIMARY",
-												disabled:
-													page == 1 ? true : false,
-											},
-											{
-												type: "BUTTON",
-												label: "Forward",
-												customId: "forward",
-												style: "PRIMARY",
-												disabled: selectValues.find(
-													(value) =>
-														value.value ==
-														(page + 1).toString()
-												)
-													? false
-													: true,
-											},
-										],
-									}),
+									/**
 									new MessageActionRow({
 										components: [
 											{
@@ -294,6 +294,39 @@ export default class MessagePagination extends BasePagination {
 												maxValues: 1,
 												// Fucking mess lmao
 												options: selectValues,
+											},
+										],
+									}),
+									*/
+									new MessageActionRow({
+										components: [
+											{
+												type: "BUTTON",
+												label: "◀️",
+												customId: "back",
+												style: "SECONDARY",
+												disabled:
+													page == 1 ? true : false,
+											},
+											{
+												type: "BUTTON",
+												label: `${page}/${pages}`,
+												customId: "counter",
+												style: "PRIMARY",
+												disabled: true,
+											},
+											{
+												type: "BUTTON",
+												label: "▶️",
+												customId: "forward",
+												style: "SECONDARY",
+												disabled: selectValues.find(
+													(value) =>
+														value.value ==
+														(page + 1).toString()
+												)
+													? false
+													: true,
 											},
 										],
 									}),
