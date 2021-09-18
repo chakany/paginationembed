@@ -22,7 +22,7 @@ const embed = new MessagePagination({
 	timeout: 300000, // Milliseconds before expiry
 	message: Message, // Pass your Message Object
 	array,
-	callbackFn: (value, index) => `**${index + 1}.** ${value}`,
+	callbackfn: (value, index) => `**${index + 1}.** ${value}`,
 });
 
 embed.build();
