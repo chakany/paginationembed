@@ -1,6 +1,6 @@
 {
 	"name": "@ryukobot/paginationembed",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Easy array pagination in Discord.js v13",
 	"main": "dist/index.js",
 	"scripts": {
@@ -32,6 +32,8 @@
 		"discord",
 		"discord-js",
 		"discord.js",
-		"bot"
+		"bot",
+		"pagination",
+		"embed"
 	]
 }
