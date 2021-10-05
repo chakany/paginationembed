@@ -15,7 +15,10 @@ jobs:
               name: "Setup Node"
               with:
                   node-version: "16"
+                  cache: "yarn"
+
             - name: "Install Dependencies"
-              run: yarn
+              run: yarn --immutable
+
             - name: "Build"
               run: yarn build
