@@ -37,7 +37,7 @@ embed.build();
 With NPM:
 
 ```sh
-npm install --save @ryukobot/paginationembed
+npm install @ryukobot/paginationembed
 ```
 
 or Yarn:
