@@ -4,6 +4,7 @@ import {
 	ButtonInteraction,
 	SelectMenuInteraction,
 	MessageSelectOptionData,
+	MessageComponentInteraction,
 } from "discord.js";
 import BasePagination, { BasePaginationOptions } from "./BasePagination";
 
@@ -105,7 +106,7 @@ export default class MessagePagination extends BasePagination {
 			],
 		});
 
-		const filter = (i: ButtonInteraction | SelectMenuInteraction) =>
+		const filter = (i: MessageComponentInteraction) =>
 			i.componentType == "BUTTON" &&
 			(i.customId === "back" || i.customId === "forward") &&
 			i.user.id === message.author.id;
