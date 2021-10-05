@@ -10,3 +10,8 @@ test/
 docs/
 tsconfig.json
 tslint.json
+src
+.yarn
+.prettierrc
+.prettierignore
+.npmrc
