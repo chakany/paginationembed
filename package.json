@@ -1,5 +1,5 @@
 {
-	"name": "@ryukobot/paginationembed",
+	"name": "@jacany/paginationembed",
 	"version": "1.0.5",
 	"description": "Easy array pagination in Discord.js v13",
 	"main": "dist/index.js",
@@ -8,14 +8,18 @@
 		"format": "prettier --write ."
 	},
 	"license": "MIT",
+	"author": "Jack Chakany <jacany@chaker.net> (https://jacany.com)",
+	"contributors": [
+		"Ravener <ravener.anime@gmail.com> (https://ravener.vercel.app/)"
+	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ryukobot/paginationembed"
+		"url": "https://github.com/jacany/paginationembed"
 	},
 	"bugs": {
-		"url": "https://github.com/ryukobot/paginationembed/issues"
+		"url": "https://github.com/jacany/paginationembed/issues"
 	},
-	"homepage": "https://github.com/ryukobot/paginationembed",
+	"homepage": "https://github.com/jacany/paginationembed",
 	"devDependencies": {
 		"@types/node": "^16.9.2",
 		"discord.js": "^13.2.0",

@@ -2,7 +2,7 @@
 
 An Easy and Stylish way of doing Discord Embed Pagination
 
-[![CI](https://github.com/ryukobot/paginationembed/actions/workflows/ci.yml/badge.svg)](https://github.com/ryukobot/paginationembed/actions/workflows/ci.yml)
+[![CI](https://github.com/jacany/paginationembed/actions/workflows/ci.yml/badge.svg)](https://github.com/jacany/paginationembed/actions/workflows/ci.yml)
 
 ---
 
@@ -10,7 +10,7 @@ An Easy and Stylish way of doing Discord Embed Pagination
 
 ```js
 const { MessageEmbed } = require("discord.js");
-const { MessagePagination } = require("@ryukobot/paginationembed");
+const { MessagePagination } = require("@jacany/paginationembed");
 
 const array = ["Element 1", "Element 2", "Element 3"];
 
@@ -29,19 +29,19 @@ embed.build();
 ```
 
 ### Output
-![Screenshot_20210917_142849](https://user-images.githubusercontent.com/30955604/133836832-501a6380-683f-4731-91a4-04c57a8f68d9.png)
 
+![Screenshot_20210917_142849](https://user-images.githubusercontent.com/30955604/133836832-501a6380-683f-4731-91a4-04c57a8f68d9.png)
 
 ## Installing
 
 With NPM:
 
 ```sh
-npm install @ryukobot/paginationembed
+npm install @jacany/paginationembed
 ```
 
 or Yarn:
 
 ```sh
-yarn add @ryukobot/paginationembed
+yarn add @jacany/paginationembed
 ```
