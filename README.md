@@ -9,13 +9,13 @@ An Easy and Stylish way of doing Discord Embed Pagination
 ## Usage
 
 ```js
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { MessagePagination } = require("@jacany/paginationembed");
 
 const array = ["Element 1", "Element 2", "Element 3"];
 
 const embed = new MessagePagination({
-	embed: new MessageEmbed(),
+	embed: new EmbedBuilder(),
 	itemsPerPage: 2,
 	startPage: 1,
 	title: "Values",

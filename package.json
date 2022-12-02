@@ -1,7 +1,7 @@
 {
 	"name": "@jacany/paginationembed",
-	"version": "1.0.5",
-	"description": "Easy array pagination in Discord.js v13",
+	"version": "2.0.0",
+	"description": "Easy array pagination in Discord.js v14",
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
