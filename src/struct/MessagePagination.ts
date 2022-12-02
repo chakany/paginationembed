@@ -2,7 +2,6 @@ import {
 	Message,
 	ActionRowBuilder,
 	ButtonInteraction,
-	SelectMenuInteraction,
 	MessageSelectOption,
 	MessageComponentInteraction,
 	ComponentType,
@@ -108,193 +107,132 @@ export default class MessagePagination extends BasePagination {
 			time: this.timeout,
 		});
 
-		collector.on(
-			"collect",
-			(i: ButtonInteraction | SelectMenuInteraction) => {
-				if (i.componentType == ComponentType.StringSelect) {
-					i.deferUpdate();
+		collector.on("collect", (i: ButtonInteraction) => {
+			if (i.componentType == ComponentType.Button) {
+				if (i.customId == "forward") {
+					// Check if there are items in next page
+					if (
+						selectValues.find(
+							(value) => value.value == (page + 1).toString()
+						)
+					) {
+						i.deferUpdate();
+						page++;
+						const newPaginate = this.paginate(
+							values,
+							this.itemsPerPage,
+							page
+						);
 
-					page = parseInt(i.values[0]);
+						embed.setFields([
+							{
+								name: this.title,
+								value: newPaginate.join("\n"),
+							},
+						]);
 
-					const newPaginate = this.paginate(
-						values,
-						this.itemsPerPage,
-						page
-					);
-
-					embed.setFields([
-						{
-							name: this.title,
-							value: newPaginate.join("\n"),
-						},
-					]);
-
-					sent.edit({
-						embeds: [embed],
-						components: [
-							new ActionRowBuilder<ButtonBuilder>({
-								components: [
-									{
-										type: ComponentType.Button,
-										label: "◀️",
-										customId: "back",
-										style: ButtonStyle.Secondary,
-										disabled: page == 1 ? true : false,
-									},
-									{
-										type: ComponentType.Button,
-										label: `${page}/${pages}`,
-										customId: "counter",
-										style: ButtonStyle.Primary,
-										disabled: true,
-									},
-									{
-										type: ComponentType.Button,
-										label: "▶️",
-										customId: "forward",
-										style: ButtonStyle.Secondary,
-										disabled: selectValues.find(
-											(value) =>
-												value.value ==
-												(page + 1).toString()
-										)
-											? false
-											: true,
-									},
-								],
-							}),
-						],
-					});
+						sent.edit({
+							embeds: [embed],
+							components: [
+								new ActionRowBuilder<ButtonBuilder>({
+									components: [
+										{
+											type: ComponentType.Button,
+											label: "◀️",
+											customId: "back",
+											style: ButtonStyle.Secondary,
+											disabled: page == 1 ? true : false,
+										},
+										{
+											type: ComponentType.Button,
+											label: `${page}/${pages}`,
+											customId: "counter",
+											style: ButtonStyle.Primary,
+											disabled: true,
+										},
+										{
+											type: ComponentType.Button,
+											label: "▶️",
+											customId: "forward",
+											style: ButtonStyle.Secondary,
+											disabled: selectValues.find(
+												(value) =>
+													value.value ==
+													(page + 1).toString()
+											)
+												? false
+												: true,
+										},
+									],
+								}),
+							],
+						});
+					}
 				}
 
-				if (i.componentType == ComponentType.Button) {
-					if (i.customId == "forward") {
-						// Check if there are items in next page
-						if (
-							selectValues.find(
-								(value) => value.value == (page + 1).toString()
-							)
-						) {
-							i.deferUpdate();
-							page++;
-							const newPaginate = this.paginate(
-								values,
-								this.itemsPerPage,
-								page
-							);
+				if (i.customId == "back") {
+					// Check if there are items in previous page
+					if (
+						selectValues.find(
+							(value) => value.value == (page - 1).toString()
+						)
+					) {
+						i.deferUpdate();
 
-							embed.setFields([
-								{
-									name: this.title,
-									value: newPaginate.join("\n"),
-								},
-							]);
+						page--;
+						const newPaginate = this.paginate(
+							values,
+							this.itemsPerPage,
+							page
+						);
 
-							sent.edit({
-								embeds: [embed],
-								components: [
-									new ActionRowBuilder<ButtonBuilder>({
-										components: [
-											{
-												type: ComponentType.Button,
-												label: "◀️",
-												customId: "back",
-												style: ButtonStyle.Secondary,
-												disabled:
-													page == 1 ? true : false,
-											},
-											{
-												type: ComponentType.Button,
-												label: `${page}/${pages}`,
-												customId: "counter",
-												style: ButtonStyle.Primary,
-												disabled: true,
-											},
-											{
-												type: ComponentType.Button,
-												label: "▶️",
-												customId: "forward",
-												style: ButtonStyle.Secondary,
-												disabled: selectValues.find(
-													(value) =>
-														value.value ==
-														(page + 1).toString()
-												)
-													? false
-													: true,
-											},
-										],
-									}),
-								],
-							});
-						}
-					}
+						embed.setFields([
+							{
+								name: this.title,
+								value: newPaginate.join("\n"),
+							},
+						]);
 
-					if (i.customId == "back") {
-						// Check if there are items in previous page
-						if (
-							selectValues.find(
-								(value) => value.value == (page - 1).toString()
-							)
-						) {
-							i.deferUpdate();
-
-							page--;
-							const newPaginate = this.paginate(
-								values,
-								this.itemsPerPage,
-								page
-							);
-
-							embed.setFields([
-								{
-									name: this.title,
-									value: newPaginate.join("\n"),
-								},
-							]);
-
-							sent.edit({
-								embeds: [embed],
-								components: [
-									new ActionRowBuilder<ButtonBuilder>({
-										components: [
-											{
-												type: ComponentType.Button,
-												label: "◀️",
-												customId: "back",
-												style: ButtonStyle.Secondary,
-												disabled:
-													page == 1 ? true : false,
-											},
-											{
-												type: ComponentType.Button,
-												label: `${page}/${pages}`,
-												customId: "counter",
-												style: ButtonStyle.Primary,
-												disabled: true,
-											},
-											{
-												type: ComponentType.Button,
-												label: "▶️",
-												customId: "forward",
-												style: ButtonStyle.Secondary,
-												disabled: selectValues.find(
-													(value) =>
-														value.value ==
-														(page + 1).toString()
-												)
-													? false
-													: true,
-											},
-										],
-									}),
-								],
-							});
-						}
+						sent.edit({
+							embeds: [embed],
+							components: [
+								new ActionRowBuilder<ButtonBuilder>({
+									components: [
+										{
+											type: ComponentType.Button,
+											label: "◀️",
+											customId: "back",
+											style: ButtonStyle.Secondary,
+											disabled: page == 1 ? true : false,
+										},
+										{
+											type: ComponentType.Button,
+											label: `${page}/${pages}`,
+											customId: "counter",
+											style: ButtonStyle.Primary,
+											disabled: true,
+										},
+										{
+											type: ComponentType.Button,
+											label: "▶️",
+											customId: "forward",
+											style: ButtonStyle.Secondary,
+											disabled: selectValues.find(
+												(value) =>
+													value.value ==
+													(page + 1).toString()
+											)
+												? false
+												: true,
+										},
+									],
+								}),
+							],
+						});
 					}
 				}
 			}
-		);
+		});
 
 		collector.once("end", () => {
 			sent.edit({
