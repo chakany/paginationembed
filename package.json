@@ -21,10 +21,10 @@
 	},
 	"homepage": "https://github.com/jacany/paginationembed",
 	"devDependencies": {
-		"@types/node": "^16.9.2",
-		"discord.js": "^13.2.0",
-		"prettier": "^2.4.0",
-		"typescript": "^4.4.3"
+		"@types/node": "^18.11.10",
+		"discord.js": "^14.7.1",
+		"prettier": "^2.8.0",
+		"typescript": "^4.9.3"
 	},
 	"peerDependencies": {
 		"discord.js": "^13.2.0"
