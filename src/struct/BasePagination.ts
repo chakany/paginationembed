@@ -1,9 +1,9 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 
 type CallbackFn = (value: never, index: number, array: never[]) => unknown;
 
 export interface BasePaginationOptions {
-	embed: MessageEmbed;
+	embed: EmbedBuilder;
 	array: never[];
 	startPage?: number;
 	itemsPerPage: number;
@@ -13,7 +13,7 @@ export interface BasePaginationOptions {
 }
 
 export default abstract class BasePagination {
-	public embed: MessageEmbed;
+	public embed: EmbedBuilder;
 	protected format: CallbackFn;
 	protected title: string;
 	protected array: never[];
@@ -24,7 +24,7 @@ export default abstract class BasePagination {
 
 	constructor(options: BasePaginationOptions) {
 		const {
-			embed = new MessageEmbed(),
+			embed = new EmbedBuilder(),
 			array,
 			startPage = 1,
 			itemsPerPage,

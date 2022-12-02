@@ -1,10 +1,13 @@
 import {
 	Message,
-	MessageActionRow,
+	ActionRowBuilder,
 	ButtonInteraction,
 	SelectMenuInteraction,
-	MessageSelectOptionData,
+	MessageSelectOption,
 	MessageComponentInteraction,
+	ComponentType,
+	ButtonStyle,
+	ButtonBuilder,
 } from "discord.js";
 import BasePagination, { BasePaginationOptions } from "./BasePagination";
 
@@ -36,13 +39,15 @@ export default class MessagePagination extends BasePagination {
 
 		const startPage = this.paginate(values, this.itemsPerPage, page);
 
-		const selectValues: MessageSelectOptionData[] = [];
+		const selectValues: MessageSelectOption[] = [];
 
 		for (let i = 1; i <= pages; i++) {
 			selectValues.push({
 				label: `Page #${i}`,
 				description: `Jump to Page #${i}`,
 				value: i.toString(),
+				default: false,
+				emoji: null,
 			});
 		}
 
@@ -60,41 +65,28 @@ export default class MessagePagination extends BasePagination {
 		const sent = await message.channel.send({
 			embeds: [embed],
 			components: [
-				/** 
-				new MessageActionRow({
+				new ActionRowBuilder<ButtonBuilder>({
+					type: ComponentType.ActionRow,
 					components: [
 						{
-							type: "SELECT_MENU",
-							customId: "select",
-							placeholder: `Page #${page}`,
-							maxValues: 1,
-							// Fucking mess lmao
-							options: selectValues,
-						},
-					],
-				}),
-				*/
-				new MessageActionRow({
-					components: [
-						{
-							type: "BUTTON",
+							type: ComponentType.Button,
 							label: "◀️",
 							customId: "back",
-							style: "SECONDARY",
+							style: ButtonStyle.Secondary,
 							disabled: page == 1 ? true : false,
 						},
 						{
-							type: "BUTTON",
+							type: ComponentType.Button,
 							label: `${page}/${pages}`,
 							customId: "counter",
-							style: "PRIMARY",
+							style: ButtonStyle.Primary,
 							disabled: true,
 						},
 						{
-							type: "BUTTON",
+							type: ComponentType.Button,
 							label: "▶️",
 							customId: "forward",
-							style: "SECONDARY",
+							style: ButtonStyle.Secondary,
 							disabled: selectValues.find(
 								(value) => value.value == (page + 1).toString()
 							)
@@ -107,7 +99,7 @@ export default class MessagePagination extends BasePagination {
 		});
 
 		const filter = (i: MessageComponentInteraction) =>
-			i.componentType == "BUTTON" &&
+			i.componentType == ComponentType.Button &&
 			(i.customId === "back" || i.customId === "forward") &&
 			i.user.id === message.author.id;
 
@@ -119,7 +111,7 @@ export default class MessagePagination extends BasePagination {
 		collector.on(
 			"collect",
 			(i: ButtonInteraction | SelectMenuInteraction) => {
-				if (i.componentType == "SELECT_MENU") {
+				if (i.componentType == ComponentType.StringSelect) {
 					i.deferUpdate();
 
 					page = parseInt(i.values[0]);
@@ -140,41 +132,27 @@ export default class MessagePagination extends BasePagination {
 					sent.edit({
 						embeds: [embed],
 						components: [
-							/**
-							new MessageActionRow({
+							new ActionRowBuilder<ButtonBuilder>({
 								components: [
 									{
-										type: "SELECT_MENU",
-										customId: "select",
-										placeholder: `Page #${page}`,
-										maxValues: 1,
-										// Fucking mess lmao
-										options: selectValues,
-									},
-								],
-							}),
-							*/
-							new MessageActionRow({
-								components: [
-									{
-										type: "BUTTON",
+										type: ComponentType.Button,
 										label: "◀️",
 										customId: "back",
-										style: "SECONDARY",
+										style: ButtonStyle.Secondary,
 										disabled: page == 1 ? true : false,
 									},
 									{
-										type: "BUTTON",
+										type: ComponentType.Button,
 										label: `${page}/${pages}`,
 										customId: "counter",
-										style: "PRIMARY",
+										style: ButtonStyle.Primary,
 										disabled: true,
 									},
 									{
-										type: "BUTTON",
+										type: ComponentType.Button,
 										label: "▶️",
 										customId: "forward",
-										style: "SECONDARY",
+										style: ButtonStyle.Secondary,
 										disabled: selectValues.find(
 											(value) =>
 												value.value ==
@@ -189,7 +167,7 @@ export default class MessagePagination extends BasePagination {
 					});
 				}
 
-				if (i.componentType == "BUTTON") {
+				if (i.componentType == ComponentType.Button) {
 					if (i.customId == "forward") {
 						// Check if there are items in next page
 						if (
@@ -215,42 +193,28 @@ export default class MessagePagination extends BasePagination {
 							sent.edit({
 								embeds: [embed],
 								components: [
-									/** 
-									new MessageActionRow({
+									new ActionRowBuilder<ButtonBuilder>({
 										components: [
 											{
-												type: "SELECT_MENU",
-												customId: "select",
-												placeholder: `Page #${page}`,
-												maxValues: 1,
-												// Fucking mess lmao
-												options: selectValues,
-											},
-										],
-									}),
-									*/
-									new MessageActionRow({
-										components: [
-											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: "◀️",
 												customId: "back",
-												style: "SECONDARY",
+												style: ButtonStyle.Secondary,
 												disabled:
 													page == 1 ? true : false,
 											},
 											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: `${page}/${pages}`,
 												customId: "counter",
-												style: "PRIMARY",
+												style: ButtonStyle.Primary,
 												disabled: true,
 											},
 											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: "▶️",
 												customId: "forward",
-												style: "SECONDARY",
+												style: ButtonStyle.Secondary,
 												disabled: selectValues.find(
 													(value) =>
 														value.value ==
@@ -292,42 +256,28 @@ export default class MessagePagination extends BasePagination {
 							sent.edit({
 								embeds: [embed],
 								components: [
-									/**
-									new MessageActionRow({
+									new ActionRowBuilder<ButtonBuilder>({
 										components: [
 											{
-												type: "SELECT_MENU",
-												customId: "select",
-												placeholder: `Page #${page}`,
-												maxValues: 1,
-												// Fucking mess lmao
-												options: selectValues,
-											},
-										],
-									}),
-									*/
-									new MessageActionRow({
-										components: [
-											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: "◀️",
 												customId: "back",
-												style: "SECONDARY",
+												style: ButtonStyle.Secondary,
 												disabled:
 													page == 1 ? true : false,
 											},
 											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: `${page}/${pages}`,
 												customId: "counter",
-												style: "PRIMARY",
+												style: ButtonStyle.Primary,
 												disabled: true,
 											},
 											{
-												type: "BUTTON",
+												type: ComponentType.Button,
 												label: "▶️",
 												customId: "forward",
-												style: "SECONDARY",
+												style: ButtonStyle.Secondary,
 												disabled: selectValues.find(
 													(value) =>
 														value.value ==
